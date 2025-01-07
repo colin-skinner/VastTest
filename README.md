@@ -6,19 +6,20 @@
 - Statistics should be reported at the end
 
 ## How the code is organized
-Classes:
-- SimObject:
-    - Base class for all objects in the simulation
-- Truck: 
-    - Has a state machine
-        - States: MINING, DRIVING_FROM_MINE, DRIVING_TO_MINE, UNLOADING, and WAITING_AT_STATION
-    - Keeps track of number of its own statistics
-- Station:
-    - Keeps queue of Truck pointers that acts as its line of trucks waiting to unload
-    - When a truck reaches the front of the queue, the station notifies the truck that it should begin unloading
-- Simulation
-    - Keeps time and calls the simulate_timestep() functions 
-    - Has the "find station with least trucks" function for a truck to call
+- Classes:
+    - SimObject:
+        - Base class for all objects in the simulation
+    - Truck: 
+        - Has a state machine
+            - States: MINING, DRIVING_FROM_MINE, DRIVING_TO_MINE, UNLOADING, and WAITING_AT_STATION
+        - Keeps track of number of its own statistics
+    - Station:
+        - Keeps queue of Truck pointers that acts as its line of trucks waiting to unload
+        - When a truck reaches the front of the queue, the station notifies the truck that it should begin unloading
+    - Simulation
+        - Keeps time and calls the simulate_timestep() functions 
+        - Has the "find station with least trucks" function for a truck to call
+
 
 
 I ended up modeling this simulation after a CS polymorphism/inheritance project from one of my classes in which a central "Simulation" class calls the "simulate" functions of all the objects in the simulation. I also tried to avoid dynamic programming, since the only objects I needed to allocate were the trucks and stations at the beginning of the simulation.  
@@ -69,8 +70,13 @@ I definitely think that I have a good intution for how to create a simulation su
 - Data validation for inputs
     - I didn't really have enough time
     - This also goes hand-in-hand with better testing, as this makes modules have more defined unit tests for each function
+- Better documentation as I write my code
+    - I try to name functions and variables so that they are easy to understand, but this also includes commenting
+    - Since it was changing functions often, I opted out of documenting as I went, but ran out of time to finish it completely.
 
-Overall, I think that given a larger timeframe to start (like a day or two), I would have spent some more time planning and creating tests for each module. In the past I've only used pytest and [Unity:https://www.throwtheswitch.org/unity] (but only in the context of microcontrollers and a specific VSCode IDE called PlatformIO), so it was a new experience trying to develop testing code for this simulation (I would have used Unity, but I did this challenge on my flight back from New Zealand, so I didn't have any internet to download the library). In the end, unfortunately I did not end up with enough time to close out the testing. Normally, my problem solving approach is to test as I go, but since I was a little pressed for time (and since this is a particularly large assignment), I defaulted to a "test the solution as a whole" approach, which is not something I normally do when coding. So that is something I would like to improve for next time, and homefully this summer working on Haven-1.
+Overall, I think that given a larger timeframe to start (like a day or two), I would have spent some more time planning and creating tests for each module. In the past I've only used pytest and [Unity:https://www.throwtheswitch.org/unity] (but only in the context of microcontrollers and a specific VSCode IDE called PlatformIO), so it was a new experience trying to develop testing code for this simulation (I would have used Unity, but I did this challenge on my flight back from New Zealand, so I didn't have any internet to download the library). 
+
+In the end, unfortunately I did not end up with enough time to close out the testing. Normally, my problem solving approach is to test as I go, but since I was a little pressed for time (and since this is a particularly large assignment), I defaulted to a "test the solution as a whole" approach, which is not something I normally do when coding. So that is something I would like to improve for next time, and homefully this summer working on Haven-1.
 
 Thanks for this great opportunity!
 
