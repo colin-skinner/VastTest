@@ -5,6 +5,13 @@
 - To run, run `./simulation t s`, where t is the number of trucks and s is the number of stations
 - Statistics should be reported at the end
 
+## How to run
+- To test, run `./test.sh`
+    - Compiles using C++11 (which has range-based for loops and the "auto" type)
+    - If there is an error running this script, run `chmod +x ./test.sh`
+- To run, run `./test_sim`
+- Statistics should be reported at the end
+
 ## How the code is organized
 - Classes:
     - SimObject:
@@ -74,9 +81,9 @@ I definitely think that I have a good intution for how to create a simulation su
     - I try to name functions and variables so that they are easy to understand, but this also includes commenting
     - Since it was changing functions often, I opted out of documenting as I went, but ran out of time to finish it completely.
 
-Overall, I think that given a larger timeframe to start (like a day or two), I would have spent some more time planning and creating tests for each module. In the past I've only used pytest and [Unity:https://www.throwtheswitch.org/unity] (but only in the context of microcontrollers and a specific VSCode IDE called PlatformIO), so it was a new experience trying to develop testing code for this simulation (I would have used Unity, but I did this challenge on my flight back from New Zealand, so I didn't have any internet to download the library). 
+Overall, I think that given a larger timeframe to start (like a day or two), I would have spent some more time planning and creating tests for each module. In the past I've only used pytest and [Unity](https://www.throwtheswitch.org/unity) (but only in the context of microcontrollers and a specific VSCode IDE called PlatformIO), so it was a new experience trying to develop testing code for this simulation (I would have used Unity, but I did this challenge on my flight back from New Zealand, so I didn't have any internet to download the library). 
 
-In the end, unfortunately I did not end up with enough time to close out the testing. Normally, my problem solving approach is to test as I go, but since I was a little pressed for time (and since this is a particularly large assignment), I defaulted to a "test the solution as a whole" approach, which is not something I normally do when coding. So that is something I would like to improve for next time, and homefully this summer working on Haven-1.
+In the end, unfortunately I did not end up with enough time to close out the testing. Normally, my problem solving approach is to test as I go, but since I was a little pressed for time (and since this is a particularly large assignment), I defaulted to a "test the solution as a whole" approach, which is not something I normally do when coding. So that is something I would like to improve for next time, and hopefully this summer working on Haven-1.
 
 Thanks for this great opportunity!
 
