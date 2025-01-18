@@ -19,5 +19,7 @@ int main()
     printf("\n");
     RUN_TEST(test_ten_trucks_one_station_1);
     printf("\n");
+    RUN_TEST(test_ten_trucks_two_stations);
+    printf("\n");
     return UNITY_END();
 }

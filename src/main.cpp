@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     else {
         LOG("\n----- No trucks and stations specified. Defaulting to 500 and 5. -----\n");
         LOG("\n----- Initialization -----\n");
-        sim.add_trucks(500, false);
+        sim.add_trucks(500);
         sim.add_stations(5);
 
         // 72 Hours

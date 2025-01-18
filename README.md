@@ -1,26 +1,26 @@
 ## How to run
 - To build, run `./build.sh`
     - Compiles using C++11 (which has range-based for loops and the "auto" type)
-    - If there is an error running this script, run `chmod +x ./build.sh`
-- To run, run `./simulation t s`, where t is the number of trucks and s is the number of stations
+    - If there is an error running this script, run `chmod +x ./build/build.sh`
+- To run, run `./build/simulation t s`, where t is the number of trucks and s is the number of stations
 - Statistics should be reported at the end
 
 ## How to run
 - To test, run `./test.sh`
     - Compiles with print statements turned off so unity testing is the only output
     - Compiles using C++11 (which has range-based for loops and the "auto" type)
-    - If there is an error running this script, run `chmod +x ./test.sh`
-- To run, run `./test_sim`
+    - If there is an error running this script, run `chmod +x ./build/test.sh`
+- To run, run `./build/test_sim`
 - Statistics should be reported at the end
 
 ## Sample output
 With 1000 trucks and 2 mining stations, here is the output:
 ```
-ColinSkkpro1223:VastTest magi-nerv$ ./simulation 1000 2
+ColinSkkpro1223:VastTest magi-nerv$ ./build/simulation 1000 2
 
 ----- Initialization -----
 Requested 1000 trucks and added 1000 trucks
-Requested 2 stations and added 2 trucks
+Requested 2 stations and added 2 stations
 
 ----- Simulation -----
 Started 4320 minute simulation
@@ -28,7 +28,7 @@ Sim Stopped at 4320 min
 
 ----- Statistics -----
 Most unloads: 3
-Longest wait time: 30 min
+Longest wait time: 2290 min
 Longest mining time: 300 min
 Average time spent waiting: 85.79%
 Average time spent mining: 11.04%
@@ -57,7 +57,7 @@ I ended up modeling this simulation after a CS polymorphism/inheritance project 
 
 
 ## Future Plan
-As I neared about 4 total hours on the project, I realized that a lot of the rest of the implementation (in addition to finishing tests) would be logging and reporting all the statistics, which falls more into data science or analysis (like with GNC sims). It would take a lot more time to fully implement all my ideas (something I may do after I submit this because this is a really fun project). I had many more ideas for statistics that I included below but have not implemented all of them yet due to time constraints.
+I realized that a lot of the rest of the implementation (in addition to finishing tests) would be logging and reporting all the statistics, which falls more into data science or analysis (like with GNC sims). It would take a lot more time to fully implement all my ideas (something I may do after I submit this because this is a really fun project). I had many more ideas for statistics that I included below but have not implemented all of them yet due to time constraints.
 
 In general, I had more time, I would include more stats that track distributions rather than single numbers (i.e. maximum wait time).
 
@@ -98,16 +98,15 @@ I definitely think that I have a good intution for how to create a simulation su
 
 - Better testing (including a more test-as-I-go approach)
     - Includes modules that are better designed 
+    - With hindsight, I may change the simulation to add trucks in different locations at the start of the simulation (i.e. waiting in line) for better testing.
 - Data validation for inputs
     - I didn't really have enough time
     - This also goes hand-in-hand with better testing, as this makes modules have more defined unit tests for each function
 - Better documentation as I write my code
     - I try to name functions and variables so that they are easy to understand, but this also includes commenting
-    - Since it was changing functions often, I opted out of documenting as I went, but ran out of time to finish it completely.
+    - Since I was changing functions often, I opted out of documenting as I went, but ran out of time to finish it completely.
 
-Overall, I think that given a larger timeframe to start (like a day or two), I would have spent some more time planning and creating tests for each module. In the past I've only used pytest and [Unity](https://www.throwtheswitch.org/unity) (but only in the context of microcontrollers and a specific VSCode IDE called PlatformIO), so it was a new experience trying to develop testing code for this simulation (I would have used Unity, but I did this challenge on my flight back from New Zealand, so I didn't have any internet to download the library). 
-
-In the end, unfortunately I did not end up with enough time to close out the testing. Normally, my problem solving approach is to test as I go, but since I was a little pressed for time (and since this is a particularly large assignment), I defaulted to a "test the solution as a whole" approach, which is not something I normally do when coding. So that is something I would like to improve for next time, and hopefully this summer working on Haven-1.
+I believe my solution is fairly intricate and scaleable for more types of objects than just trucks and stations. I'm proud of the implentation of the unity testing, and that is something I would like to continue improving for more robust code, especially this summer working on Haven-1.
 
 Thanks for this great opportunity!
 
