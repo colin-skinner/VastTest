@@ -26,24 +26,22 @@ Truck::Truck(Simulation *simulation, bool random_mining)
     // SimObject variables
     last_sim_time_min = -1;
     sim = simulation;
-
-    stats = TruckStats();
     
     // Preilitializing all states
-    stats.total_action_minutes_by_state[MINING] = 0;
-    stats.total_action_minutes_by_state[DRIVING_FROM_MINE] = 0;
-    stats.total_action_minutes_by_state[WAITING_AT_STATION] = 0;
-    stats.total_action_minutes_by_state[UNLOADING] = 0;
-    stats.total_action_minutes_by_state[DRIVING_TO_MINE] = 0;
+    this->stats.total_action_minutes_by_state[MINING] = 0;
+    this->stats.total_action_minutes_by_state[DRIVING_FROM_MINE] = 0;
+    this->stats.total_action_minutes_by_state[WAITING_AT_STATION] = 0;
+    this->stats.total_action_minutes_by_state[UNLOADING] = 0;
+    this->stats.total_action_minutes_by_state[DRIVING_TO_MINE] = 0;
     
 
-    // printf("ACTION LENGTH %d\n", action_length_min);
+    // LOG("ACTION LENGTH %d\n", action_length_min);
 }
 
 Truck::~Truck()
 {
     
-    // printf("Deleting truck\n");
+    // LOG("Deleting truck\n");
 }
 
 void Truck::simulate_timestep()
@@ -52,11 +50,11 @@ void Truck::simulate_timestep()
     int time_diff_min = current_sim_time_min - last_sim_time_min;
     int action_time = current_sim_time_min - last_action_start_min;
 
-    // For debugging
-    // printf("time diff: %d\n", time_diff_min);
-    // printf("current_time: %d\n", current_sim_time_min);
-    // printf("action_time: %d\n", action_time);
-    // printf("action_time: %d\n", action_length_min);
+    // For LOGging
+    // LOG("time diff: %d\n", time_diff_min);
+    // LOG("current_time: %d\n", current_sim_time_min);
+    // LOG("action_time: %d\n", action_time);
+    // LOG("action_time: %d\n", action_length_min);
 
     // Must advance sim
     if (time_diff_min < 1) {
@@ -67,7 +65,12 @@ void Truck::simulate_timestep()
 
     // If not finished with action, continue
     if (action_time < action_length_min) {
-        // printf("ACTION\n");
+        // LOG("ACTION\n");
+        return;
+    }
+
+    // If waiting in line, return 
+    if (state == WAITING_AT_STATION) {
         return;
     }
 
@@ -75,7 +78,7 @@ void Truck::simulate_timestep()
     run_state_machine_changes(action_time);
     
     
-    // printf("CHANGING STATES\n");
+    // LOG("CHANGING STATES\n");
     
     this->last_action_start_min = current_sim_time_min;
 
@@ -84,7 +87,7 @@ void Truck::simulate_timestep()
 
 void Truck::run_state_machine_changes(int current_action_time)
 {
-    // printf("Switching state after %d min\n", action_length_min);
+    // LOG("Switching state after %d min\n", action_length_min);
 
     // If mining is done done
     if (state == MINING) {
@@ -119,7 +122,7 @@ void Truck::run_state_machine_changes(int current_action_time)
 
     // Finished with unloading
     if (state == UNLOADING) {
-        stats.unloads++;
+        this->stats.unloads++;
         
         // Send signal to remove it from queue
         this->station->advance_queue();
@@ -141,17 +144,18 @@ void Truck::notify_unloading()
     action_length_min = UNLOADING_TIME;
 
     int wait_time = sim->get_sim_time() - last_action_start_min;
-    stats.longest_wait = max(stats.longest_wait, wait_time);
+    this->stats.longest_wait = max(stats.longest_wait, wait_time);
 
     this->last_action_start_min = sim->get_sim_time();
-    // printf("Unloading\n");
+    // LOG("Unloading\n");
 }
 
 void Truck::log_stats()
 {
-    // printf("%d\t", state);
-    // printf("%d\n", stats.total_action_minutes_by_state.at(MINING));
-    stats.total_action_minutes_by_state[this->state]++;
+    // LOG("%d\t", state);
+    // LOG("%d\n", stats.total_action_minutes_by_state.at(MINING));
+    this->stats.total_action_minutes_by_state[this->state]++;
+    // printf("%d\n", stats.longest_mine);
 }
 
 int Truck::select_mining_time(int smallest, int largest) {
@@ -164,13 +168,22 @@ int Truck::select_mining_time(int smallest, int largest) {
         mining_time = 6;
     }
 
-    stats.longest_mine = max(stats.longest_mine, mining_time);
-
+    this->stats.longest_mine = max(this->stats.longest_mine, mining_time);
+    // printf("%d\n", this->stats.longest_mine);
     return mining_time;
 }
 
+const TruckStats &Truck::finish_and_get_stats()
+{
+    if (state == WAITING_AT_STATION) {
+        int wait_time = sim->get_sim_time() - last_action_start_min;
+        stats.longest_wait = max(stats.longest_wait, wait_time);
+    }
 
-// For debugging purposes
+    return stats;
+}
+
+// For LOGging purposes
 const char* Truck::get_state_string()
 {
     switch(state) {

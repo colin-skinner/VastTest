@@ -2,6 +2,7 @@
 
 #include "SimObject.h"
 #include "Simulation.h"
+#include "globals.h"
 
 #include <vector>
 #include <queue>

@@ -8,7 +8,7 @@ Station::Station(Simulation *simulation)
 
 Station::~Station()
 {
-    // printf("Deleting station\n");
+    // LOG("Deleting station\n");
 }
 
 void Station::simulate_timestep()

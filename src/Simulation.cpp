@@ -34,7 +34,7 @@ void Simulation::add_trucks(int num_trucks, bool random_mining)
         this->trucks.push_back(new Truck(this, random_mining));
     }
 
-    printf("Requested %d trucks and added %lu trucks\n", num_trucks, this->trucks.size());
+    LOG("Requested %d trucks and added %lu trucks\n", num_trucks, this->trucks.size());
 }
 
 void Simulation::add_stations(int num_stations)
@@ -43,13 +43,13 @@ void Simulation::add_stations(int num_stations)
         this->stations.push_back(new Station(this));
     }
 
-    printf("Requested %d stations and added %lu trucks\n", num_stations, this->stations.size());
+    LOG("Requested %d stations and added %lu stations\n", num_stations, this->stations.size());
 }
 
 bool Simulation::simulate(long end_time_min, bool report_time)
 {
     this->end_time_min = end_time_min;
-    printf("Started %ld minute simulation\n",end_time_min);
+    LOG("Started %ld minute simulation\n",end_time_min);
 
     for (long i = 0; i < end_time_min; i++) {
         
@@ -57,7 +57,7 @@ bool Simulation::simulate(long end_time_min, bool report_time)
 
     }
 
-    printf("Sim Stopped at %ld min\n",this->t_min);
+    LOG("Sim Stopped at %ld min\n",this->t_min);
     return false;
 }
 
@@ -65,19 +65,19 @@ void Simulation::simulate_timestep(int minutes, bool report_time)
 {
     
     if (trucks.size() == 0) {
-        printf("Need to add trucks to simulate");
+        LOG("Need to add trucks to simulate");
         return;
     }
 
     if (stations.size() == 0) {
-        printf("Need to add stations to simulate");
+        LOG("Need to add stations to simulate");
         return;
     }
 
     if (report_time && (t_min % 10) == 0)
-        printf("Sim Time: %ld min\n", this->t_min);
+        LOG("Sim Time: %ld min\n", this->t_min);
     
-    // printf("Advanced sim time by %ld minutes to %ld\n", minutes, this->t_min);
+    // LOG("Advanced sim time by %ld minutes to %ld\n", minutes, this->t_min);
 
     // Simulate trucks
     for (auto truck : trucks) {
@@ -94,7 +94,7 @@ void Simulation::simulate_timestep(int minutes, bool report_time)
     }
 
 
-    // printf("Truck is %s\n", trucks[0]->get_state_string());
+    // LOG("Truck is %s\n", trucks[0]->get_state_string());
     // Log truck and station states
     for (auto truck : trucks) {
         truck->log_stats();
@@ -140,16 +140,18 @@ const SimulationStats& Simulation::calc_statistics()
 
     // Reports on simulation-wide stats 
     for (const auto& truck : trucks) {
-        TruckStats truck_stats;
-        truck_stats = truck->finish_and_get_stats();
+        TruckStats truck_stats = truck->finish_and_get_stats();
 
         // Total stats
         stats.total_mining_min += truck_stats.total_action_minutes_by_state[MINING];
         stats.total_waiting_min += truck_stats.total_action_minutes_by_state[WAITING_AT_STATION];
+        
 
         // Max stats
         stats.longest_mining_times.push_back(truck_stats.longest_mine);
+        // printf("%d\n", truck_stats.longest_mine);
         stats.longest_waiting_times.push_back(truck_stats.longest_wait);
+        // printf("%d\n", truck_stats.longest_wait);
         stats.unloads.push_back(truck_stats.unloads);
 
 
@@ -168,24 +170,26 @@ const SimulationStats& Simulation::calc_statistics()
 
     }
 
-    printf("Most unloads: %d\n", *max_element(
+    LOG("Most unloads: %d\n", *max_element(
         stats.unloads.begin(), stats.unloads.end())
     );
 
-    printf("Longest wait time: %d min\n", *max_element(
+    LOG("Longest wait time: %d min\n", *max_element(
         stats.longest_waiting_times.begin(), stats.longest_waiting_times.end())
     );
-    printf("Longest mining time: %d min\n", *max_element(
+    LOG("Longest mining time: %d min\n", *max_element(
         stats.longest_mining_times.begin(), stats.longest_mining_times.end())
     );
 
-    printf("Average time spent waiting: %.2f%%\n", 100 * (float)stats.total_waiting_min/ trucks.size() / end_time_min);
-    printf("Average time spent mining: %.2f%%\n", 100 * (float)stats.total_mining_min/ trucks.size() / end_time_min);
+    LOG("Average time spent waiting: %.2f%%\n", 100 * (float)stats.total_waiting_min/ trucks.size() / end_time_min);
+    LOG("Average time spent mining: %.2f%%\n", 100 * (float)stats.total_mining_min/ trucks.size() / end_time_min);
 
-    printf("Total mining minutes: %d min\n", stats.total_mining_min);
-    printf("Total waiting minutes: %d min\n", stats.total_waiting_min);
+    LOG("Total mining minutes: %d min\n", stats.total_mining_min);
+    LOG("Total waiting minutes: %d min\n", stats.total_waiting_min);
 
-    printf("Max queue length: %d trucks\n", stats.max_queue_length);
+    LOG("Max queue length: %d trucks\n", stats.max_queue_length);
+
+    
     // Reports on notable stats of distributions of individual trucks and stations
     // e.g. Truck that waited the most, truck that unloaded the most times
 

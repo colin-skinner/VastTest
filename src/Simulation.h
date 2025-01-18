@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include "globals.h"
 
 class Truck;
 class Station;

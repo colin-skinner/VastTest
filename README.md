@@ -7,11 +7,35 @@
 
 ## How to run
 - To test, run `./test.sh`
+    - Compiles with print statements turned off so unity testing is the only output
     - Compiles using C++11 (which has range-based for loops and the "auto" type)
     - If there is an error running this script, run `chmod +x ./test.sh`
 - To run, run `./test_sim`
 - Statistics should be reported at the end
 
+## Sample output
+With 1000 trucks and 2 mining stations, here is the output:
+```
+ColinSkkpro1223:VastTest magi-nerv$ ./simulation 1000 2
+
+----- Initialization -----
+Requested 1000 trucks and added 1000 trucks
+Requested 2 stations and added 2 trucks
+
+----- Simulation -----
+Started 4320 minute simulation
+Sim Stopped at 4320 min
+
+----- Statistics -----
+Most unloads: 3
+Longest wait time: 30 min
+Longest mining time: 300 min
+Average time spent waiting: 85.79%
+Average time spent mining: 11.04%
+Total mining minutes: 477092 min
+Total waiting minutes: 3706039 min
+Max queue length: 458 trucks
+```
 ## How the code is organized
 - Classes:
     - SimObject:

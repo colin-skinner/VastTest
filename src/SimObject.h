@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include "globals.h"
 class Simulation;
 
 // Base class for sim objects

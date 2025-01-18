@@ -2,6 +2,7 @@
 
 #include "SimObject.h"
 #include "Simulation.h"
+#include "globals.h"
 
 #include <string>
 #include <unordered_map>
@@ -17,8 +18,7 @@ class Station;
 #define BAD_STATE -1
 
 
-#define DRIVING_TIME 30
-#define UNLOADING_TIME 5
+
 
 // Struct for storing truck statistics
 struct TruckStats {
@@ -72,9 +72,9 @@ public:
 
 
     
-    const TruckStats& finish_and_get_stats() const {return stats;}
+    const TruckStats& finish_and_get_stats();
 
-    // For debugging purposes
+    // For LOgging purposes
     const char* get_state_string();
 
     

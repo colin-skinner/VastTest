@@ -1,6 +1,8 @@
 #include <iostream>
 #include <assert.h>
-#include "../Simulation.h"
+#include "../src/Simulation.h"
+
+#include "../unity/unity.h"
 
 using namespace std;
 
@@ -21,45 +23,35 @@ void test_single_truck() {
     sim.add_stations(stations);
 
     // 72 Hours
-    printf("\n----- Simulation -----\n");
+    LOG("\n----- Simulation -----\n");
     sim.simulate(142, false);
     // sim.simulate(70, 10000);
 
-    printf("\n----- Statistics -----\n");
+    LOG("\n----- Statistics -----\n");
     auto stats = sim.calc_statistics();
 
 
-    assert_that(
-        *max_element(stats.longest_mining_times.begin(), stats.longest_mining_times.end()) == 6,
-        "Longest mining time should be 6 minutes."
-    );
+    // Longest mining time should be 6 minutes
+    TEST_ASSERT_EQUAL(6,*max_element(stats.longest_mining_times.begin(), stats.longest_mining_times.end()));
 
-    assert_that(
-        *max_element(stats.longest_waiting_times.begin(), stats.longest_waiting_times.end()) == 0,
-        "Longest waiting time should be 0 minutes."
-    );
+    // Longest waiting time should be 0 minutes
+    TEST_ASSERT_EQUAL(0, *max_element(stats.longest_waiting_times.begin(), stats.longest_waiting_times.end()));
+        
+    // Max queue length should be 0
+    TEST_ASSERT_EQUAL(0, stats.max_queue_length);
 
-    assert_that(
-        stats.max_queue_length == 0,
-        "Max queue length should be 0 minutes."
-    );
+    // Total mining minutes should be 12 minutes (6*2)
+    TEST_ASSERT_EQUAL(12, stats.total_mining_min);
 
-    assert_that(
-        stats.total_mining_min == 12,
-        "Total mining minutes should be 12 minutes (6*2)"
-    );
-
-    assert_that(
-        stats.total_waiting_min == 0,
-        "Total waiting minutes should be 0 minutes"
-    );
+    // Total waiting minutes should be 0 minutes 
+    TEST_ASSERT_EQUAL(0, stats.total_waiting_min);
 }
 
 
 // Runs with 
 // - 1000 trucks and 1000 stations
 // - random mining OFF (6 minutes)
-// - 142 minutes (2 cycles of mining and unloading)
+// - 142 minutes (2 cycles of 6 minute mining and 5 minute unloading)
 void test_ten_trucks() {
     Simulation sim2;
 
@@ -70,48 +62,61 @@ void test_ten_trucks() {
     sim2.add_stations(stations);
 
     // 72 Hours
-    printf("\n----- Simulation -----\n");
+    LOG("\n----- Simulation -----\n");
     sim2.simulate(142, false);
     // sim.simulate(70, 10000);
 
-    printf("\n----- Statistics -----\n");
+    LOG("\n----- Statistics -----\n");
     auto stats = sim2.calc_statistics();
 
 
-    assert_that(
-        *max_element(stats.longest_mining_times.begin(), stats.longest_mining_times.end()) == 6,
-        "Longest mining time should be 6 minutes."
-    );
+    // Longest mining time should be 6 minutes
+    TEST_ASSERT_EQUAL(6,*max_element(stats.longest_mining_times.begin(), stats.longest_mining_times.end()));
 
-    assert_that(
-        *max_element(stats.longest_waiting_times.begin(), stats.longest_waiting_times.end()) == 0,
-        "Longest waiting time should be 0 minutes."
-    );
+    // Longest waiting time should be 0 minutes
+    TEST_ASSERT_EQUAL(0, *max_element(stats.longest_waiting_times.begin(), stats.longest_waiting_times.end()));
+        
+    // Max queue length should be 0
+    TEST_ASSERT_EQUAL(0, stats.max_queue_length);
 
-    assert_that(
-        stats.max_queue_length == 0,
-        "Max queue length should be 0 minutes."
-    );
+    // Total mining minutes should be 12000 minutes (1000*6*2)
+    TEST_ASSERT_EQUAL(12000, stats.total_mining_min);
 
-    assert_that(
-        stats.total_mining_min == 12000,
-        "Total mining minutes should be 12000 minutes (1000*6*2)"
-    );
-
-    assert_that(
-        stats.total_waiting_min == 0,
-        "Total waiting minutes should be 0 minutes"
-    );
+    // Total waiting minutes should be 0 minutes 
+    TEST_ASSERT_EQUAL(0, stats.total_waiting_min);
 }
 
-int main(int argc, char* argv[]) {
+// Runs with 
+// - 1000 trucks and 1 station
+// - random mining OFF (6 minutes)
+// - 36 minutes (1 cycle of mining and driving back)
+// - Queue should be 999 trucks 
+void test_ten_trucks_one_station_1() {
+    Simulation sim;
 
-    test_single_truck();
-    test_single_truck();
-    test_single_truck();
-    test_ten_trucks();
+    int trucks = 1000;
+    int stations = 1;
 
-    printf("\n\n\nPassed all tests!\n\n");
-    
-    return 0;
+    sim.add_trucks(trucks, false);
+    sim.add_stations(stations);
+
+    // 36 minutes
+    LOG("\n----- Simulation -----\n");
+    sim.simulate(60, false);
+
+    LOG("\n----- Statistics -----\n");
+    auto stats = sim.calc_statistics();
+
+
+    // Longest mining time should be 6 minutes
+    TEST_ASSERT_EQUAL(6,*max_element(stats.longest_mining_times.begin(), stats.longest_mining_times.end()));
+
+    // Longest waiting time should be 24 minutes (60 - 30 - 6 = 24)
+    TEST_ASSERT_EQUAL(24, *max_element(stats.longest_waiting_times.begin(), stats.longest_waiting_times.end()));
+        
+    // Max queue length should be 999 trucks
+    TEST_ASSERT_EQUAL(999, stats.max_queue_length);
+
+    // Total mining minutes should be 6000 minutes (1000*6)
+    TEST_ASSERT_EQUAL(6000, stats.total_mining_min);
 }
